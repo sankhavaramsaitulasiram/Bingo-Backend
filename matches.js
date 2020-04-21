@@ -61,13 +61,13 @@ module.exports = function(app) {
                 const newvalues = { $set: { "contextId": contextId, "matchData": data } };
                 const dbo = client.db('BingoProject');
 
-                dbo.collection("matches_data").findOne(myquery, function(err, result) {
+                dbo.collection("matches_data").findOne(JSON.stringify(myquery), function(err, result) {
                     if (err) throw err;
                     
   
                     if (result && result.contextId) {
                         // Update current match
-                        dbo.collection("matches_data").updateOne(myquery, newvalues, function(err, res) {
+                        dbo.collection("matches_data").updateOne(JSON.stringify(myquery), newvalues, function(err, res) {
                             if (err) {
                                 reject(err);
                             }
@@ -104,7 +104,7 @@ module.exports = function(app) {
                 var myquery = { 'contextId': contextId };
                 console.log("My query "+myquery);
                 const dbo = client.db('BingoProject');
-                dbo.collection("matches_data").findOne(myquery, function(err, result) {
+                dbo.collection("matches_data").findOne(JSON.stringify(myquery), function(err, result) {
                     if(err){
                         reject(err);
                     }

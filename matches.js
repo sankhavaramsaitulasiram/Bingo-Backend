@@ -56,21 +56,22 @@ module.exports = function(app) {
               })
               .then(client => {
                 console.log('Connected to Database');
-                var myquery = { "contextId": contextId };
+                var myquery = { 'contextId': contextId };
                 const dbo = client.db('BingoProject');
+                console.log("My query "+myquery);
                 dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if (err) throw err;
                     var newvalues = { $set: { "contextId": contextId, "matchData": data } };
-                    var myObj = { "contextId": contextId, "matchData": data } ;
+                    var myObj = { 'contextId': contextId, 'matchData': data } ;
                     if (result && result.contextId) {
                         // Update current match
-                        dbo.collection("matches_data").updateOne(myquery, JSON.stringify(newvalues), function(err, res) {
+                        dbo.collection("matches_data").updateOne(myquery, newvalues, function(err, res) {
                             if (err) {
                                 reject(err);
                             }
                             console.log("1 document updated");
                             resolve(res);
-                            dbo.close();
+       
                           });
                     }else{
                       
@@ -81,11 +82,10 @@ module.exports = function(app) {
                                 }
                                 console.log("1 document inserted");
                                 resolve(res);
-                                dbo.close();
+
                               });
                         
                         }
-                    dbo.close();
                   });
               }).catch(console.error)
         });
@@ -99,7 +99,8 @@ module.exports = function(app) {
               })
               .then(client => {
                 console.log('Connected to Database' );
-                var myquery = { "contextId": contextId };
+                var myquery = { 'contextId': contextId };
+                console.log("My query "+myquery);
                 const dbo = client.db('BingoProject');
                 dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if(err){

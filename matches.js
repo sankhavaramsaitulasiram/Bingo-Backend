@@ -58,29 +58,29 @@ module.exports = function(app) {
                 console.log('Connected to Database');
                 var myquery = { contextId: contextId };
                 const dbo = client.db('BingoProject');
-                dbo.collection("matches_data").findOne(myquery, function(err, result) {
+                dbo.collection("matches_data").findOne(JSON.stringify(myquery), function(err, result) {
                     if (err) throw err;
-                    var newvalues = { $set: { contextId: contextId, matchData: data } };
-                    var myObj = { contextId: contextId, matchData: data } ;
+                    var newvalues = { $set: { "contextId": contextId, "matchData": data } };
+                    var myObj = { "contextId": contextId, matchData: data } ;
                     if (result && result.contextId) {
                         // Update current match
-                        dbo.collection("matches_data").updateOne(myquery, newvalues, function(err, res) {
+                        dbo.collection("matches_data").updateOne(JSON.stringify(myquery), JSON.stringify(newvalues), function(err, res) {
                             if (err) {
                                 reject(err);
                             }
                             console.log("1 document updated");
-                            resolve();
+                            resolve(res);
                             dbo.close();
                           });
                     }else{
                       
                             // Insert new match
-                            dbo.collection("matches_data").insertOne(myObj, function(err, res) {
+                            dbo.collection("matches_data").insertOne(JSON.stringify(myObj), function(err, res) {
                                 if (err) {
                                     reject(err);
                                 }
                                 console.log("1 document inserted");
-                                resolve();
+                                resolve(res);
                                 dbo.close();
                               });
                         
@@ -98,13 +98,14 @@ module.exports = function(app) {
                 useUnifiedTopology: true
               })
               .then(client => {
-                console.log('Connected to Database')
+                console.log('Connected to Database' +contextId);
                 const dbo = client.db('BingoProject');
-                var myquery = { contextId: contextId };
+                var myquery = { "contextId": JSON.stringify(contextId)};
                 dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if(err){
                         reject(err);
                     }
+                    console.log("result  "+result);
                     if (result && result.contextId) {
                         resolve(result.matchData);
                     }else{

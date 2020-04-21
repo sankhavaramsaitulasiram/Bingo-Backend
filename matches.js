@@ -60,10 +60,9 @@ module.exports = function(app) {
                 const dbo = client.db('BingoProject');
                 dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if (err) throw err;
-                    console.log(result.contextId);
                     var newvalues = { $set: { contextId: contextId, matchData: data } };
                     var myObj = { contextId: contextId, matchData: data } ;
-                    if (result.contextId) {
+                    if (result && result.contextId) {
                         // Update current match
                         dbo.collection("matches_data").updateOne(myquery, newvalues, function(err, res) {
                             if (err) {
@@ -71,7 +70,7 @@ module.exports = function(app) {
                             }
                             console.log("1 document updated");
                             resolve();
-                            db.close();
+                            dbo.close();
                           });
                     }else{
                       
@@ -82,11 +81,11 @@ module.exports = function(app) {
                                 }
                                 console.log("1 document inserted");
                                 resolve();
-                                db.close();
+                                dbo.close();
                               });
                         
                         }
-                    db.close();
+                    dbo.close();
                   });
               }).catch(console.error)
         });

@@ -98,10 +98,10 @@ module.exports = function(app) {
                 useUnifiedTopology: true
               })
               .then(client => {
-                console.log('Connected to Database' +contextId);
+                console.log('Connected to Database' );
+                var myquery = { contextId: contextId };
                 const dbo = client.db('BingoProject');
-                var myquery = { "contextId": JSON.stringify(contextId)};
-                dbo.collection("matches_data").findOne(myquery, function(err, result) {
+                dbo.collection("matches_data").findOne(JSON.stringify(myquery), function(err, result) {
                     if(err){
                         reject(err);
                     }

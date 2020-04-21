@@ -4,13 +4,12 @@ const connectionString = 'mongodb+srv://dudesBingo:Iamadmin@1234@dudesbingo-g454
 module.exports = function(app) {
     app.post('/save-match', function(request, response) {
         var contextId = request.body.contextId;
-        var signature = request.body.signature;
+        var data = request.body.matchData;
         var player = request.body.player;
         
         var isValid = true;
         
         if (isValid) {
-            var data = getEncodedData(signature);
             saveMatchDataAsync(contextId, data)
             .then(function(result){
                 response.json({'success':true});
@@ -25,12 +24,11 @@ module.exports = function(app) {
     })
     
     app.post('/get-match', function(request, response) {
-        var signature = request.body.signature;
+        var contextId = request.body.contextId;
         
-        var isValid = validate(signature);
+        var isValid = true;
         
         if (isValid) {
-            var contextId = getEncodedData(signature);
             loadMatchDataAsync(contextId)
             .then(function(result){
                 if (result) {
@@ -109,7 +107,7 @@ module.exports = function(app) {
                         reject(err);
                     }
                     if (result.contextId) {
-                        resolve(result.data);
+                        resolve(result.matchData);
                     }else{
                         resolve();
                     }

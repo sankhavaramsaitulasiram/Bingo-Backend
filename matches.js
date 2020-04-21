@@ -57,12 +57,12 @@ module.exports = function(app) {
                 useUnifiedTopology: true
               })
               .then(client => {
-                console.log('Connected to Database')
+                console.log('Connected to Database');
+                var myquery = { contextId: contextId };
                 const dbo = client.db('BingoProject');
-                dbo.collection("matches_data").findOne({}, function(err, result) {
+                dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if (err) throw err;
                     console.log(result.contextId);
-                    var myquery = { contextId: contextId };
                     var newvalues = { $set: { contextId: contextId, matchData: data } };
                     var myObj = { contextId: contextId, matchData: data } ;
                     if (result.contextId) {
@@ -103,7 +103,8 @@ module.exports = function(app) {
               .then(client => {
                 console.log('Connected to Database')
                 const dbo = client.db('BingoProject');
-                dbo.collection("matches_data").findOne({}, function(err, result) {
+                var myquery = { contextId: contextId };
+                dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if(err){
                         reject(err);
                     }

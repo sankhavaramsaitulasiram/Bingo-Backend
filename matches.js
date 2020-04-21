@@ -56,12 +56,12 @@ module.exports = function(app) {
               })
               .then(client => {
                 console.log('Connected to Database');
-                var myquery = { contextId: contextId };
+                var myquery = { "contextId": contextId };
                 const dbo = client.db('BingoProject');
                 dbo.collection("matches_data").findOne(JSON.stringify(myquery), function(err, result) {
                     if (err) throw err;
                     var newvalues = { $set: { "contextId": contextId, "matchData": data } };
-                    var myObj = { "contextId": contextId, matchData: data } ;
+                    var myObj = { "contextId": contextId, "matchData": data } ;
                     if (result && result.contextId) {
                         // Update current match
                         dbo.collection("matches_data").updateOne(JSON.stringify(myquery), JSON.stringify(newvalues), function(err, res) {

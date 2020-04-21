@@ -49,21 +49,21 @@ module.exports = function(app) {
     
     saveMatchDataAsync = function(contextId, data) {
         return new Promise(function(resolve, reject){
-
-
             MongoClient.connect(connectionString, {
                 useUnifiedTopology: true
               })
               .then(client => {
                 console.log('Connected to Database');
-                var myquery = { 'contextId': contextId };
-                const dbo = client.db('BingoProject');
-                console.log("My query "+myquery);
-                var myObj = { 'contextId': contextId, 'matchData': data } ;
+                const myquery = { 'contextId': contextId };
+                console.log("My query "+JSON.stringify(myquery));
+                const myObj = { 'contextId': contextId, 'matchData': data } ;
                 console.log("BEfore inserting ----> "+JSON.stringify(myObj));
+                const newvalues = { $set: { "contextId": contextId, "matchData": data } };
+                const dbo = client.db('BingoProject');
+
                 dbo.collection("matches_data").findOne(myquery, function(err, result) {
                     if (err) throw err;
-                    var newvalues = { $set: { "contextId": contextId, "matchData": data } };
+                    
   
                     if (result && result.contextId) {
                         // Update current match

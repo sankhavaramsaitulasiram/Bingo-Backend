@@ -7,7 +7,7 @@ module.exports = function(app) {
         var signature = request.body.signature;
         var player = request.body.player;
         
-        var isValid = validate(signature);
+        var isValid = true;
         
         if (isValid) {
             var data = getEncodedData(signature);

@@ -105,7 +105,7 @@ module.exports = function(app) {
                     if(err){
                         reject(err);
                     }
-                    if (result.contextId) {
+                    if (result && result.contextId) {
                         resolve(result.matchData);
                     }else{
                         resolve();
